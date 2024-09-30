@@ -12,6 +12,12 @@ const Header = () => {
         {icon: Icons.MarketplaceIcon, name: "Home", path: ""}, 
         {icon: Icons.GroupsIcon, name: "Home", path: ""}]
 
+    const personal = [
+        {icon: Icons.MenuIcon, name: "Menu", path: ""}, 
+        {icon: Icons.MessengerIcon, name: "Messenger", path: ""}, 
+        {icon: Icons.NotificationIcon, name: "Notifications", path: ""}
+    ]
+
     return (
         <div className="flex sticky z-50 bg-white items-center p-2 px-5 shadow-md">
             {/* Left */}
@@ -22,8 +28,8 @@ const Header = () => {
             </div>
 
             {/* right */}
-            <div className="flex ">
-                <Personal />
+            <div className="flex items-center sm:space-x-2 justify-end">
+                <Personal icons={personal}/>
             </div>
         </div>
     )
