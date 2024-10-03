@@ -19,7 +19,7 @@ const Header = () => {
     ]
 
     return (
-        <div className="flex sticky z-50 bg-white items-center p-2 px-5 shadow-md">
+        <div className="flex sticky z-50 bg-white items-center p-2 px-5 shadow-md justify-between">
             {/* Left */}
             <SearchBar />
             {/* center */}

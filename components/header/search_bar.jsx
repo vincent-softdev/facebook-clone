@@ -17,7 +17,7 @@ const SearchBar = () => {
 
     return (
         <div className="flex items-center">
-            {!triggerInput && <Image src={"http://links.papareact.com/5me"} width={40} height={40} layout="fixed"/>}
+            {!triggerInput && <Image src={"http://links.papareact.com/5me"} alt="" width={40} height={40} layout="fixed"/>}
             {
                 triggerInput && (
                     <button onClick={turnInputOff} className="text-gray-600 mr-2">
