@@ -18,9 +18,12 @@ export default async function Home() {
     return (
         <div>
             <Header />
-            <div className="w-full xl:w-[1464px]">
-                <SideBar />
+            <div className="w-full flex flex-col items-center">
+                <div className="w-full 2xl:w-[1464px]">
+                    <SideBar />
+                </div>
             </div>
+            
         </div>
     );
 }
