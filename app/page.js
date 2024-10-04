@@ -1,9 +1,9 @@
 // /app/page.js
 
 import Header from "@/components/header/header";
-import ClientSessionWrapper from "@/components/client_session_wrapper";
 import Login from "@/components/login/login";
 import { checkSession } from "@/utils/session_check"; // Import the session check utility
+import SideBar from "@/components/side_bar/side_bar";
 
 export default async function Home() {
     // Use the utility to fetch the session
@@ -18,8 +18,9 @@ export default async function Home() {
     return (
         <div>
             <Header />
-            <ClientSessionWrapper session={session} />
-            <h1>Welcome back, {session.user.name}!</h1>
+            <div className="w-full xl:w-[1464px]">
+                <SideBar />
+            </div>
         </div>
     );
 }
