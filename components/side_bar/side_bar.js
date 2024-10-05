@@ -22,7 +22,7 @@ const SideBar = () => {
     };
 
     return (
-        <div className="p-2 mt-5 hidden lg:inline-block max-w-[600px] xl:min-w-[300px]">
+        <div className="p-2 hidden lg:inline-block max-w-[600px] lg:min-w-[280px] lg:w-[280px] xl:min-w-[300px]">
             {/* Pass the profile information to SideBarIcons */}
             <SideBarIcons profile={profile} />
             <hr className="my-2"/>
