@@ -6,6 +6,7 @@ import { checkSession } from "@/utils/session_check"; // Import the session chec
 import SideBar from "@/components/side_bar/side_bar";
 import Stories from "@/components/story/stories";
 import Contacts from "@/components/contacts/contacts";
+import Post from "@/components/posts/post";
 
 export default async function Home() {
     // Use the utility to fetch the session
@@ -18,13 +19,14 @@ export default async function Home() {
 
     // Render the header and session info if logged in
     return (
-        <div>
+        <div className="bg-[#f0f2f5]">
             <Header />
             <div className="w-full flex flex-col items-center">
                 <div className="mt-5 w-full 2xl:w-[1464px] flex justify-center gap-10">
                     <SideBar />
                     <div id="middle-home" className="flex flex-col overflow-hidden w-full max-w-[680px]">
                         <Stories />
+                        <Post />
                     </div>
                     <Contacts />
                 </div>

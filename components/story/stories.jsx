@@ -43,14 +43,14 @@ const Stories = () => {
             {/* Create story card */}
             <div
                 style={{
-                    backgroundImage: `linear-gradient(to bottom, transparent calc(100% - 64px), #252526 70px), url(${profile.image})`,
+                    backgroundImage: `linear-gradient(to bottom, transparent calc(100% - 50px), white 70px), url(${profile.image})`,
                     backgroundSize: "cover",
                     backgroundPosition: "top",
                 }}
-                className="w-[140px] min-w-[140px] cursor-pointer h-[250px] rounded-xl bg-center text-white relative font-semibold p-3 pt-5 justify-end items-center gap-2 flex flex-col bg-no-repeat transition-all object-cover"
+                className="border-[1px] shadow-md w-[140px] min-w-[140px] cursor-pointer h-[250px] rounded-xl bg-center text-black relative font-semibold p-3 pt-5 pb-2 justify-end items-center gap-1 flex flex-col bg-no-repeat transition-all object-cover"
             >
-                <Icons.Add className="w-10 h-10 rounded-full p-1 bg-[#0966ff] border-[3px] border-[#252526]" />
-                <p>Create story</p>
+                <Icons.Add className="w-10 h-10 rounded-full p-1 text-white bg-[#0966ff] border-[4px] border-white" />
+                <p className="text-[13px]">Create story</p>
             </div>
 
             {/* Map over the stories */}
