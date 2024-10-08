@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 
 const CreatePostModal = ({ profile, closeModal }) => {
     const [text, setText] = useState("");
+    const [postActivated, setPostActivated] = useState(false);
     const [textLine, setTextLine] = useState(0);
     const [fontSize, setFontSize] = useState(30); // Initial font size
     const textAreaRef = useRef(null);
@@ -21,14 +22,16 @@ const CreatePostModal = ({ profile, closeModal }) => {
                 return totalLines + wrappedLines;
             }, 0);
 
-            setTextLine(lines)
-            // Adjust font size based on the scrollHeight of the textarea
-            setFontSize(lines <= 3? 30 : (lines > 1 && lines <= 5) ? 24 : 16)
+            setTextLine(lines);
+            setFontSize(lines <= 3 ? 30 : (lines > 1 && lines <= 5) ? 24 : 16);
         }
     };
 
     useEffect(() => {
         adjustSize(); // Adjust size whenever the text changes
+
+        // Enable "Post" button only when text is not empty
+        setPostActivated(text.trim().length > 0);
     }, [text]);
 
     return (
@@ -58,7 +61,7 @@ const CreatePostModal = ({ profile, closeModal }) => {
                     </button>
                 </div>
                 <hr className="border-none h-[1px] bg-gray-200" />
-                <div id="model_content" className={`p-4 pb-0`}>
+                <div id="model_content" className="p-4 pb-0">
                     <div id="content_user-detail flex flex-row">
                         <div
                             style={{ backgroundImage: `url(${profile.image})` }}
@@ -87,15 +90,37 @@ const CreatePostModal = ({ profile, closeModal }) => {
                         placeholder="What's on your mind?"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        style={{ fontSize: `${fontSize}px`, maxHeight: "56vh", lineHeight: "1.2", height: `${textLine * fontSize + 20 + ((textLine * fontSize) > 270 ? (textLine * fontSize) > 300 ? 50 : 45 : 30)}px`}} // Adjust textarea styles
+                        style={{
+                            fontSize: `${fontSize}px`,
+                            maxHeight: "56vh",
+                            lineHeight: "1.2",
+                            height: `${textLine * fontSize + 20 + ((textLine * fontSize) > 270 ? (textLine * fontSize) > 300 ? 50 : 45 : 30)}px`,
+                        }} // Adjust textarea styles
                     />
-                    <div className="h-[40px] bg-black mb-4">
-
+                    <div className="h-[40px] mb-4 flex justify-between items-center">
+                        <IconImages.ColorfulTextIcon className="h-full" />
+                        <IconImages.SmillingEmogi className="w-6 h-7 opacity-70" />
                     </div>
-                    <div className="h-[60px] bg-yellow-400">
-
+                    <div className="h-[60px] flex border-gray-300 rounded-md border-[1px] px-4 font-semibold justify-between">
+                        <div className="h-full flex items-center">
+                            Add to your post
+                        </div>
+                        <div id="function-icon-cover" className="h-full flex items-center gap-4">
+                            <IconImages.ImageIcon className="w-6 h-6" />
+                            <IconImages.TagPeopleIcon className="w-6 h-6" />
+                            <IconImages.AddEmotionIcon className="w-6 h-6" />
+                            <IconImages.AddLocationTagIcon className="w-6 h-6" />
+                            <IconImages.ListMoreIcon className="w-6 h-6" />
+                        </div>
                     </div>
-                    <button className="w-full mt-3 bg-gray-400 p-1 px-3 rounded-md font-semibold opacity-30">
+                    <button
+                        className={`w-full mt-3 py-[6px] p-1 px-3 rounded-md font-semibold ${
+                            postActivated
+                                ? "bg-blue-600 text-white opacity-100 cursor-pointer"
+                                : "bg-gray-400 opacity-30 cursor-not-allowed"
+                        }`}
+                        disabled={!postActivated}
+                    >
                         Post
                     </button>
                 </div>
