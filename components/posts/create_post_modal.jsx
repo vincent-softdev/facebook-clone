@@ -8,15 +8,11 @@ const CreatePostModal = ({ profile, closeModal }) => {
     const [text, setText] = useState("");
     const [textLine, setTextLine] = useState(0);
     const [fontSize, setFontSize] = useState(30); // Initial font size
-    const [modalHeight, setModalHeight] = useState(400); // Initial modal height
-    const [maxModalHeightReached, setMaxModalHeightReached] = useState(false);
     const textAreaRef = useRef(null);
 
     // Function to adjust font size and modal height based on input height
     const adjustSize = () => {
         if (textAreaRef.current) {
-            const textAreaHeight = textAreaRef.current.scrollHeight;
-            
             // Split the textarea value by newlines and count wrapped lines
             const lines = text.split("\n").reduce((totalLines, line) => {
                 const lineLength = line.length;
@@ -26,6 +22,7 @@ const CreatePostModal = ({ profile, closeModal }) => {
             }, 0);
 
             setTextLine(lines)
+            console.log(textLine * fontSize)
 
             // Adjust font size based on the scrollHeight of the textarea
             if (lines <= 3) {
@@ -40,26 +37,6 @@ const CreatePostModal = ({ profile, closeModal }) => {
                 setFontSize(16); // Smaller size for a lot of text
                 console.log(`line 3`)
             }
-
-            console.log(lines)
-            setModalHeight(400 + lines*fontSize);
-
-            // Dynamically increase modal height by 50px until it reaches 90vh
-            // if (textAreaHeight > inputHeight && !maxModalHeightReached) {
-            //     const newModalHeight = currentModalHeight + 50;
-            //     const maxModalHeight = window.innerHeight * 0.9; // 90vh
-
-            //     if (newModalHeight <= maxModalHeight) {
-            //         setModalHeight(newModalHeight);
-            //     } else {
-            //         setMaxModalHeightReached(true); // Stop resizing when reaching 90vh
-            //     }
-            // } else if (textAreaHeight < inputHeight && modalHeight > 200) {
-            //     // Reduce the modal height if the text decreases and the modal is larger than its original size
-            //     const newModalHeight = Math.max(currentModalHeight - 50, 200); // Ensure it doesn't go below initial height
-            //     setModalHeight(newModalHeight);
-            //     setMaxModalHeightReached(false); // Allow resizing again
-            // }
         }
     };
 
@@ -118,15 +95,19 @@ const CreatePostModal = ({ profile, closeModal }) => {
                     </div>
                     <textarea
                         ref={textAreaRef}
-                        className={`w-full h-full mt-3 p-2 bg-transparent min-h-[200px] border-none outline-none resize-none ${
-                            maxModalHeightReached ? "overflow-y-scroll" : ""
-                        }`}
+                        className={`w-full h-full mt-3 p-2 bg-transparent min-h-[100px] border-none outline-none resize-none`}
                         rows={2}
                         placeholder="What's on your mind?"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        style={{ fontSize: `${fontSize}px`, maxHeight: "68vh", lineHeight: "1.2", height: `${textLine * fontSize + 50}px`}} // Adjust textarea styles
+                        style={{ fontSize: `${fontSize}px`, maxHeight: "56vh", lineHeight: "1.2", height: `${textLine * fontSize + 20 + ((textLine * fontSize) > 270 ? (textLine * fontSize) > 300 ? 50 : 45 : 30)}px`}} // Adjust textarea styles
                     />
+                    <div className="h-[40px] bg-black mb-4">
+
+                    </div>
+                    <div className="h-[60px] bg-yellow-400">
+
+                    </div>
                     <button className="w-full mt-3 bg-gray-400 p-1 px-3 rounded-md font-semibold opacity-30">
                         Post
                     </button>
