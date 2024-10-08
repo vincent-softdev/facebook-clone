@@ -22,21 +22,8 @@ const CreatePostModal = ({ profile, closeModal }) => {
             }, 0);
 
             setTextLine(lines)
-            console.log(textLine * fontSize)
-
             // Adjust font size based on the scrollHeight of the textarea
-            if (lines <= 3) {
-                setFontSize(30); // Reset to initial size when there's very little text
-                console.log(`line 1`)
-            }
-            if (lines > 1 && lines <= 5) {
-                setFontSize(24); // Medium size for moderate text
-                console.log(`line 2`)
-            }
-            if (lines > 5) {
-                setFontSize(16); // Smaller size for a lot of text
-                console.log(`line 3`)
-            }
+            setFontSize(lines <= 3? 30 : (lines > 1 && lines <= 5) ? 24 : 16)
         }
     };
 
