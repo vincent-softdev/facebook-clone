@@ -1,16 +1,16 @@
 // /app/page.js
-
+'use client'
 import Header from "@/components/header/header";
 import Login from "@/components/login/login";
-import { checkSession } from "@/utils/session_check"; // Import the session check utility
 import SideBar from "@/components/side_bar/side_bar";
 import Stories from "@/components/story/stories";
 import Contacts from "@/components/contacts/contacts";
 import Post from "@/components/posts/post";
+import { useSession } from 'next-auth/react';
 
-export default async function Home() {
+export default function Home() {
     // Use the utility to fetch the session
-    const session = await checkSession();
+    const { data: session } = useSession();
 
     // If there's no session, render the login page
     if (!session) {

@@ -21,9 +21,9 @@ const Login = () => {
         if (result?.error) {
             console.error("Login failed:", result.error)
         } else {
-            console.log('login good')
+            console.log('login good: ' + JSON.stringify(result))
             // Redirect to the homepage if successful
-            router.refresh() // Navigate to the homepage
+            router.push('/'); // Navigate to the homepage
         }
     }
 
