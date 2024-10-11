@@ -3,9 +3,10 @@
 import { Icons } from "@/public/icons";
 import { IconImages } from "@/public/icon_images";
 import { useState, useRef, useEffect } from "react";
-import { db } from "@/firebase"; // Your updated firebase.js file
-import { addDoc, collection } from "firebase/firestore"; // Import Firestore functions
+import { db, storage } from "@/firebase"; // Your updated firebase.js file
+import { addDoc, collection, doc, updateDoc  } from "firebase/firestore"; // Import Firestore functions
 import { serverTimestamp } from "firebase/firestore"; // Import Firestore's serverTimestamp
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 const CreatePostModal = ({ profile, closeModal }) => {
     const [text, setText] = useState("");
@@ -64,34 +65,36 @@ const CreatePostModal = ({ profile, closeModal }) => {
     // send post detail to server
     const sendPost = async (e) => {
         e.preventDefault();
-    
+        
         if (!textAreaRef.current.value) return;
     
         // Add post to Firestore
-        await addDoc(collection(db, 'posts'), {
+        const docRef = await addDoc(collection(db, 'posts'), {
             name: profile.name,
             email: profile.email,
             content: textAreaRef.current.value,
             date: serverTimestamp(),
-        }).then(doc => {
-            if(!imageToPost) {
-                const uploadTask = storage.ref(`posts/${doc.id}`).putString(imageToPost,
-                    'data_url'
-                )
-
-                activateImage()
-
-                uploadTask.on('state_change', null, error => console.error(error), () => {
-                    // when upload complete
-                    storage.ref('posts').child(doc.id).getDownloadURl().then(url => {
-                        db.collection('posts').doc(doc.id).set()
-                    })
-                })
-            }
         });
     
+        if (imageToPost) {
+            const imageRef = ref(storage, `posts/${docRef.id}`);  // Create a reference in Firebase Storage
+    
+            // Upload image as a base64 string
+            await uploadString(imageRef, imageToPost, 'data_url').catch(error => {
+                console.error('Error uploading image:', error);
+            });
+    
+            // Get the download URL
+            const url = await getDownloadURL(imageRef);
+    
+            // Update Firestore document with the image URL
+            await updateDoc(doc(db, 'posts', docRef.id), {
+                postImage: url
+            });
+        }
+    
         textAreaRef.current.value = "";
-        closeModal()
+        closeModal();
     };
 
     return (

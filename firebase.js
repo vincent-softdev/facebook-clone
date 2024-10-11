@@ -14,10 +14,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (check if the app is already initialized)
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 // Initialize Firestore and Storage
 const db = getFirestore(app);
-const storage = getStorage(app);
+// const storage = getStorage(app);
 
 export { db, storage };
