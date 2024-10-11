@@ -73,6 +73,16 @@ const AddGifIcon = (props) => {
     )
 }
 
+const AddImageIcon = (props) => {
+    const url = "https://static.xx.fbcdn.net/rsrc.php/v3/yQ/r/V_plvjywlv_.png"
+
+    return (
+        <i className={props.className} style={{backgroundImage: `url(${url})`, backgroundSize: `83px 225px`, backgroundRepeat: `no-repeat`, display: `inline-block`, backgroundPosition: `-21px -187px`}}>
+
+        </i>
+    )
+}
+
 export const IconImages = {
     Close,
     ColorfulTextIcon,
@@ -82,5 +92,6 @@ export const IconImages = {
     AddEmotionIcon,
     AddLocationTagIcon,
     AddGifIcon,
-    ListMoreIcon
+    ListMoreIcon,
+    AddImageIcon
 }

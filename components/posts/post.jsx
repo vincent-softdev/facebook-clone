@@ -23,11 +23,12 @@ const Post = () => {
     const profile = {
         image: session.user.image, // Use fetched user image if available
         name: session.user.name, // Use fetched user name if available
+        email: session.user.email
     };
 
     return (
         <div className="mt-4">
-            <CreatePost profile={profile} />
+            <CreatePost profile={profile}/>
             {/* Add PostCard component or any additional content here */}
             {/* Posts */}
             {
