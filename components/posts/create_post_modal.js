@@ -7,10 +7,12 @@ import { db, storage } from "@/firebase"; // Your updated firebase.js file
 import { addDoc, collection, doc, updateDoc  } from "firebase/firestore"; // Import Firestore functions
 import { serverTimestamp } from "firebase/firestore"; // Import Firestore's serverTimestamp
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import Spinner from "../spinner/spinner";
 
 const CreatePostModal = ({ profile, closeModal }) => {
     const [text, setText] = useState("");
     const [postActivated, setPostActivated] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [imageActivated, setImageActivated] = useState(false);
     const [textLine, setTextLine] = useState(0);
     const [fontSize, setFontSize] = useState(30); // Initial font size
@@ -67,6 +69,7 @@ const CreatePostModal = ({ profile, closeModal }) => {
         e.preventDefault();
         
         if (!textAreaRef.current.value) return;
+        setLoading(true); // Start loading spinner
     
         // Add post to Firestore
         const docRef = await addDoc(collection(db, 'posts'), {
@@ -93,8 +96,9 @@ const CreatePostModal = ({ profile, closeModal }) => {
             });
         }
     
-        textAreaRef.current.value = "";
+        // textAreaRef.current.value = "";
         closeModal();
+        setLoading(false)
     };
 
     return (
@@ -146,94 +150,104 @@ const CreatePostModal = ({ profile, closeModal }) => {
                             </p>
                         </div>
                     </div>
-                    <div className="max-h-[45vh] w-full overflow-scroll custom-scrollbar">
-                        <textarea
-                            ref={textAreaRef}
-                            className={`w-full h-full mt-3 p-2 bg-transparent min-h-[100px] border-none outline-none resize-none`}
-                            rows={2}
-                            placeholder="What's on your mind?"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            style={{
-                                fontSize: `${fontSize}px`,
-                                lineHeight: "1.2",
-                                height: `${textLine * fontSize + 20 + ((textLine * fontSize) > 270 ? (textLine * fontSize) > 300 ? 50 : 45 : 30)}px`,
-                            }} // Adjust textarea styles
-                        />
-                        <div className={`h-[40px] mb-4 flex items-center ${!(textLine < 4 && !imageActivated) ? "justify-end" : "justify-between"} `}>
-                            {(textLine < 4 && !imageActivated) && <IconImages.ColorfulTextIcon className="h-full" />}
-                            <IconImages.SmillingEmogi className="w-6 h-7 opacity-70" />
+                    {/* Spinner or Textarea */}
+                    {loading ? (
+                        <div className="flex justify-center items-center h-40">
+                            <Spinner /> {/* Display spinner while loading */}
                         </div>
-                        {
-                            (imageActivated) && (
-                                <div className="max-w-xl mb-4 relative">
-                                    <button
-                                                className="absolute flex justify-center rounded-full items-center top-2 pt-[2px] mt-2 mr-2 pl-[3px] w-7 h-7 border-[1px] border-gray-300 hover:bg-[#e4e6eb] bg-white right-2 text-gray-500"
-                                                onClick={activateImage}
-                                        >
-                                            <IconImages.Close className="w-6 h-6 scale-75" />
-                                        </button>
-                                    {
-                                        imageToPost == null && (
-                                            <label
-                                                className="flex justify-center w-full h-32 p-2 border-[1px] transition bg-white border-gray-300 rounded-md appearance-none cursor-pointer focus:outline-none">
-                                                
-                                                <span className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 w-full rounded-md">
-                                                    <span className="flex flex-col items-center w-full">
-                                                        <span className="bg-gray-300 w-10 h-10 rounded-full flex justify-center items-center">
-                                                            <IconImages.AddImageIcon className="w-5 h-5 "/>
-                                                        </span>
-                                                        <span className="text-black font-medium text-[1.0625rem]">Add Photos/Videos</span>
-                                                        <span className="text-[.8rem] text-gray-500">or drag and drop</span>
-                                                    </span>
-                                                </span>
-                                                <input type="file" ref={filepickerRef} name="file_upload" className="hidden" onChange={addImageToPost}/>
-                                            </label>
-                                        )
-                                    }
-                                    {
-                                        imageToPost && (
-                                            <label
-                                                className="flex justify-center w-full h-32 p-2 border-[1px] transition bg-white border-gray-300 rounded-md appearance-none cursor-pointer focus:outline-none">
-                                                
-                                                <div className="flex justify-center w-full bg-gray-100 rounded-md">
-                                                    <img src={imageToPost} alt="image" />
-                                                </div>
-                                            </label>
-                                            
-                                        )
-                                    }
+                    ) : (
+                        <>
+                            <div className="max-h-[45vh] w-full overflow-scroll custom-scrollbar">
+                                <textarea
+                                    ref={textAreaRef}
+                                    className={`w-full h-full mt-3 p-2 bg-transparent min-h-[100px] border-none outline-none resize-none`}
+                                    rows={2}
+                                    placeholder="What's on your mind?"
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
+                                    style={{
+                                        fontSize: `${fontSize}px`,
+                                        lineHeight: "1.2",
+                                        height: `${textLine * fontSize + 20 + ((textLine * fontSize) > 270 ? (textLine * fontSize) > 300 ? 50 : 45 : 30)}px`,
+                                    }} // Adjust textarea styles
+                                />
+                                <div className={`h-[40px] mb-4 flex items-center ${!(textLine < 4 && !imageActivated) ? "justify-end" : "justify-between"} `}>
+                                    {(textLine < 4 && !imageActivated) && <IconImages.ColorfulTextIcon className="h-full" />}
+                                    <IconImages.SmillingEmogi className="w-6 h-7 opacity-70" />
                                 </div>
-                            )
-                        }
-                    </div>
+                                {
+                                    (imageActivated) && (
+                                        <div className="max-w-xl mb-4 relative">
+                                            <button
+                                                        className="absolute flex justify-center rounded-full items-center top-2 pt-[2px] mt-2 mr-2 pl-[3px] w-7 h-7 border-[1px] border-gray-300 hover:bg-[#e4e6eb] bg-white right-2 text-gray-500"
+                                                        onClick={activateImage}
+                                                >
+                                                    <IconImages.Close className="w-6 h-6 scale-75" />
+                                                </button>
+                                            {
+                                                imageToPost == null && (
+                                                    <label
+                                                        className="flex justify-center w-full h-32 p-2 border-[1px] transition bg-white border-gray-300 rounded-md appearance-none cursor-pointer focus:outline-none">
+                                                        
+                                                        <span className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 w-full rounded-md">
+                                                            <span className="flex flex-col items-center w-full">
+                                                                <span className="bg-gray-300 w-10 h-10 rounded-full flex justify-center items-center">
+                                                                    <IconImages.AddImageIcon className="w-5 h-5 "/>
+                                                                </span>
+                                                                <span className="text-black font-medium text-[1.0625rem]">Add Photos/Videos</span>
+                                                                <span className="text-[.8rem] text-gray-500">or drag and drop</span>
+                                                            </span>
+                                                        </span>
+                                                        <input type="file" ref={filepickerRef} name="file_upload" className="hidden" onChange={addImageToPost}/>
+                                                    </label>
+                                                )
+                                            }
+                                            {
+                                                imageToPost && (
+                                                    <label
+                                                        className="flex justify-center w-full h-32 p-2 border-[1px] transition bg-white border-gray-300 rounded-md appearance-none cursor-pointer focus:outline-none">
+                                                        
+                                                        <div className="flex justify-center w-full bg-gray-100 rounded-md">
+                                                            <img src={imageToPost} alt="image" />
+                                                        </div>
+                                                    </label>
+                                                    
+                                                )
+                                            }
+                                        </div>
+                                    )
+                                }
+                            </div>
 
-                    <div className="h-[60px] flex border-gray-300 rounded-md border-[1px] px-4 font-semibold justify-between">
-                            <div className="h-full flex items-center">
-                                Add to your post
-                            </div>
-                            <div id="function-icon-cover" className="h-full flex items-center gap-4">
-                                <button onClick={activateImage}>
-                                    <IconImages.ImageIcon className="w-6 h-6 cursor-pointer" />
-                                </button>
-                                
-                                <IconImages.TagPeopleIcon className="w-6 h-6" />
-                                <IconImages.AddEmotionIcon className="w-6 h-6" />
-                                <IconImages.AddLocationTagIcon className="w-6 h-6" />
-                                <IconImages.ListMoreIcon className="w-6 h-6" />
-                            </div>
-                        </div>
-                    <button
-                        className={`w-full mt-3 py-[6px] p-1 px-3 rounded-md font-semibold ${
-                            postActivated
-                                ? "bg-blue-600 text-white opacity-100 cursor-pointer"
-                                : "bg-gray-400 opacity-30 cursor-not-allowed"
-                        }`}
-                        disabled={!postActivated}
-                        onClick={sendPost}
-                    >
-                        Post
-                    </button>
+                            <div className="h-[60px] flex border-gray-300 rounded-md border-[1px] px-4 font-semibold justify-between">
+                                    <div className="h-full flex items-center">
+                                        Add to your post
+                                    </div>
+                                    <div id="function-icon-cover" className="h-full flex items-center gap-4">
+                                        <button onClick={activateImage}>
+                                            <IconImages.ImageIcon className="w-6 h-6 cursor-pointer" />
+                                        </button>
+                                        
+                                        <IconImages.TagPeopleIcon className="w-6 h-6" />
+                                        <IconImages.AddEmotionIcon className="w-6 h-6" />
+                                        <IconImages.AddLocationTagIcon className="w-6 h-6" />
+                                        <IconImages.ListMoreIcon className="w-6 h-6" />
+                                    </div>
+                                </div>
+                            <button
+                                className={`w-full mt-3 py-[6px] p-1 px-3 rounded-md font-semibold ${
+                                    postActivated
+                                        ? "bg-blue-600 text-white opacity-100 cursor-pointer"
+                                        : "bg-gray-400 opacity-30 cursor-not-allowed"
+                                }`}
+                                disabled={!postActivated}
+                                onClick={sendPost}
+                            >
+                                {loading ? 'Posting...' : 'Post'}
+                            </button>
+                        </>
+                    )}
+                    
                 </div>
             </div>
         </div>
