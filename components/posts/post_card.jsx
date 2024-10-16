@@ -1,103 +1,99 @@
 'use client'
-import react from "react";
-import { getUserById } from "@/services/user_service";
-import { getGroupById } from "@/services/group_service";
-import { formatDistanceToNow, format } from 'date-fns';
 import { Icons } from "@/public/icons";
+import { IconImages } from "@/public/icon_images";
+import { formatDistanceToNow, format } from 'date-fns';
 
-const PostCard = ({ id, user_id, group_id, content }) => {
-    const post_date = "2024-10-11T12:10:00Z"
-    const [user, setUser] = react.useState(null);
-    const [group, setGroup] = react.useState(null);
+const PostCard = ({ post }) => {
+    const { content, date, email, name, image, postImage } = post;
 
-    // Fetch user by ID
-    if (user_id != null) {
-        react.useEffect(() => {
-            const fetchUser = async () => {
-                const response = await getUserById(user_id);
-                setUser(response);
-            };
-            fetchUser();
-        }, [user_id]);
-    }
+    // Parse the date from the post object
+    const parsedDate = date?.toDate ? date.toDate() : new Date(date);
 
-    // Fetch group by ID
-    if (group_id != null) {
-        react.useEffect(() => {
-            const fetchGroup = async () => {
-                const response = await getGroupById(group_id);
-                setGroup(response);
-            };
-            fetchGroup();
-        }, [group_id]);
-    }
-
-    // Calculate the relative date
-    const getRelativeTime = (date) => {
-        console.log(date)
-        if (!date) {
-            return "Invalid date"; // Fallback for missing date
-        }
-
-        const now = new Date();
-        const postTime = new Date(date);
-
-        // Log postTime for debugging
-        console.log("postTime:", postTime);
-
-        if (isNaN(postTime.getTime())) {
-            return "Invalid date"; // Fallback if date is unparseable
-        }
-
-        const daysDifference = (now - postTime) / (1000 * 60 * 60 * 24);
-        if (daysDifference > 7) {
-            return format(postTime, "MMMM d 'at' h:mm a");
-        } else {
-            return formatDistanceToNow(postTime, { addSuffix: true }).replace("about ", "").replace("in ", "");
-        }
-    };
+    // Format post date based on how recent it is
+    const formattedDate = (Date.now() - parsedDate.getTime() < 7 * 24 * 60 * 60 * 1000)
+        ? formatDistanceToNow(parsedDate, { addSuffix: true }).replace('about ', '') // e.g., "5 hours ago"
+        : format(parsedDate, 'MMMM d, yyyy'); // e.g., "October 12, 2024"
 
     return (
-        <div className="post-card">
-            <div className="card__header flex justify-between">
+        <div className="post-card bg-white rounded-md shadow-md">
+            <div className="card__header px-3 pt-3 flex justify-between">
                 <div className="flex">
-                    <div className="mr-2">
-                        {/* If we have a group image, we will display the group image first, then the personal image */}
-                        {
-                            (group && user) && (
-                                <div className="relative w-10">
-                                    <img src={group.url} alt="group image" className="h-9 w-9 rounded-lg" />
-                                    <img src={user.url} alt="user image" className="h-6 w-6 rounded-full absolute top-4 right-0 border-[1px] border-white" />
-                                </div>
-                            )
-                        }
-                        {
-                            (group && !user) && (
-                                <div>
-                                    <img src={group.url} alt="group image" className="h-10 w-10 rounded-full" />
-                                </div>
-                            )
-                        }
-                        {
-                            (!group && user) && (
-                                <div>
-                                    <img src={user.url} alt="user image" className="h-10 w-10 rounded-full" />
-                                </div>
-                            )
-                        }
-                    </div>
-                    <div>
-                        <div>{group && group.name}</div>
-                        <div className="font-semibold text-[12px] flex items-center text-gray-500">{user && user.name} 
-                            <span className="mb-1 mx-1">.</span> {getRelativeTime(post_date)} 
-                            <span className="mb-1 mx-1">.</span>
-                             <Icons.PublicTypeIcon />
+                    <div className="post-header--left mb-4 flex h-10">
+                        <div className="left__image">
+                            <img src={image} alt="Post image" className="h-full w-10 rounded-full mr-2"/>
+                        </div>
+                        <div className="mr-2">
+                            <div className="font-semibold">{name}</div>
+                            <div className="flex items-center h-4">
+                                <div className="text-sm text-gray-500">{formattedDate}</div>
+                                <div className="mx-1 text-sm pb-2">.</div>
+                                <div className="text-sm text-gray-600">{email}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div className="post-header--right flex h-full">
+                    <div className="p-2 hover:bg-gray-200 rounded-full cursor-pointer">
+                        <Icons.MoreIcon className="w-6"/>
+                    </div>
+                    <div className="p-2 hover:bg-gray-200 rounded-full cursor-pointer">
+                        <Icons.CloseIcon className="w-6"/>
+                    </div>
+                </div>
             </div>
-            <div className="card__content">{/* Post content goes here */}</div>
-            <div className="card__footer">{/* Footer content */}</div>
+            <div className="card__content">
+                {content && <div className="content-text px-4 pb-4">
+                    <p>{content}</p>
+                </div>}
+                {postImage && <div className="content-image w-full">
+                    <img src={postImage} alt="Post Image" className="w-full"/>
+                </div>}
+            </div>
+            <div className="card__footer">
+                <div className="reaction-calculator flex justify-between px-4 py-3">
+                    <div className="reaction-left flex gap-6">
+                        <div className="reaction-types">
+                            <div className="types-like flex w-[24px] h-[24px]">
+                                <IconImages.LikeIcon className="border-white rounded-full relative border-[2px] z-10"/>
+                                <IconImages.LoveIcon className="border-white relative rounded-full border-[2px] left-[-5px]"/>
+                            </div>
+                        </div> 
+                        <div className="reaction-amount text-gray-500">
+                            <p>285</p>
+                        </div>
+                    </div>
+                    <div className="reaction-right flex gap-4 text-gray-500">
+                        <div className="total-comment">
+                            <p>12 comments</p>
+                        </div>
+                        <div className="total-share">
+                            <p>12 shares</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="px-4">
+                    <hr />
+                </div>
+                <div className="reaction-action gap-1 flex font-semibold py-2 px-4 text-gray-500">
+                    <div className="grow flex cursor-pointer py-1 hover:bg-gray-100 rounded-md justify-center gap-2 items-center">
+                        <Icons.LikeIcon className="h-6 "/>
+                        <p>Like</p>
+                    </div>
+                    <div className="grow flex cursor-pointer py-1 hover:bg-gray-100 rounded-md justify-center gap-2 items-center">
+                        <IconImages.CommentIcon className="h-6 w-6 opacity-60"/>
+                        <p>Comment</p>
+                    </div>
+                    <div className="grow flex cursor-pointer py-1 hover:bg-gray-100 rounded-md justify-center gap-2 items-center">
+                        <IconImages.SendIcon className="h-6 w-6 opacity-60"/>
+                        <p>Send</p>
+                    </div>
+                    <div className="grow flex cursor-pointer py-1 hover:bg-gray-100 rounded-md justify-center gap-2 items-center">
+                        <IconImages.ShareIcon className="h-6 w-6 opacity-60"/>
+                        <p>Share</p>
+                    </div>
+                </div>
+                {/* We will update here when we start to allow some comments */}
+            </div>
         </div>
     );
 };

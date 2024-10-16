@@ -77,6 +77,7 @@ const CreatePostModal = ({ profile, closeModal }) => {
             email: profile.email,
             content: textAreaRef.current.value,
             date: serverTimestamp(),
+            image: profile.image
         });
     
         if (imageToPost) {
