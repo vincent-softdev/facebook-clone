@@ -1,6 +1,6 @@
 // /app/page.js
 'use client'
-import Header from "@/components/header/header";
+
 import Login from "@/components/login/login";
 import SideBar from "@/components/side_bar/side_bar";
 import Stories from "@/components/story/stories";
@@ -19,18 +19,14 @@ export default function Home() {
 
     // Render the header and session info if logged in
     return (
-        <div className="bg-[#f0f2f5]">
-            <Header />
-            <div className="w-full flex flex-col items-center">
-                <div className="mt-5 w-full 2xl:w-[1464px] flex justify-center gap-10">
-                    <SideBar />
-                    <div id="middle-home" className="flex flex-col overflow-hidden w-full max-w-[680px]">
-                        <Stories />
-                        <Post />
-                    </div>
-                    <Contacts />
+        <div className="w-full flex flex-col items-center">
+            <div className="mt-5 w-full 2xl:w-[1464px] flex justify-center gap-10">
+                <SideBar />
+                <div id="middle-home" className="flex flex-col overflow-hidden w-full max-w-[680px]">
+                    <Stories />
+                    <Post />
                 </div>
-                
+                <Contacts />
             </div>
             
         </div>

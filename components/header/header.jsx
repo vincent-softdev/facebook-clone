@@ -6,11 +6,11 @@ import Personal from "./personal";
 
 const Header = () => {
     const center = [
-        {icon: Icons.HomeIcon, name: "Home", path: ""}, 
-        {icon: Icons.FriendIcon, name: "Friends", path: ""}, 
-        {icon: Icons.VideoIcon, name: "Video", path: ""}, 
-        {icon: Icons.MarketplaceIcon, name: "Home", path: ""}, 
-        {icon: Icons.GroupsIcon, name: "Home", path: ""}]
+        {icon: Icons.HomeIcon, name: "Home", path: "/"}, 
+        {icon: Icons.FriendIcon, name: "Friends", path: "/friends"}, 
+        {icon: Icons.VideoIcon, name: "Video", path: "/"}, 
+        {icon: Icons.MarketplaceIcon, name: "Home", path: "/"}, 
+        {icon: Icons.GroupsIcon, name: "Home", path: "/"}]
 
     const personal = [
         {icon: Icons.MenuIcon, name: "Menu", path: ""}, 

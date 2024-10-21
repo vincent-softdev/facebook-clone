@@ -14,9 +14,9 @@ export const authOptions = {
                 const { email, password } = credentials;
 
                 return { 
-                    name: "Admin", 
-                    email: "lythevinh002@gmail.com", 
-                    image: "https://scontent.fmel8-1.fna.fbcdn.net/v/t39.30808-1/453235400_3817583518466333_2745631905922420128_n.jpg?stp=dst-jpg_s480x480&_nc_cat=110&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=r0sCI0dwr6MQ7kNvgHr0taP&_nc_zt=24&_nc_ht=scontent.fmel8-1.fna&_nc_gid=AsXMsbLqFHBFNH_pIUB10Em&oh=00_AYBDDKZAv3IJ-QiVOwKCvdTG24_Pi0ybk3MAvGAHDQBNAw&oe=671564E3" 
+                    name: "TFT", 
+                    email: "tft@gmail.com", 
+                    image: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/12210015038f15148d157c5a4facdd8bd5cb5e78-1232x978.png" 
                 }
             }
         }),
