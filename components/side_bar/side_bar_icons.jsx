@@ -39,7 +39,7 @@ const SideBarIcons = ({ profile }) => {
     };
 
     return (
-        <ul className="w-[360px]">
+        <ul className="w-[281px]">
             <li className="flex gap-3 items-center h-11 hover:bg-gray-100 cursor-pointer p-2 rounded-md">
                 {/* Display profile image and name */}
                 <img src={profile.image} alt="Profile" className="h-9 w-9 rounded-full" />
@@ -49,7 +49,7 @@ const SideBarIcons = ({ profile }) => {
             {/* Render the icons, but limit to the first 3 when showAll is false */}
             {icons &&
                 (showAll ? icons : icons.slice(0, 7)).map((icon, index) => (
-                    <li key={index} className="flex gap-3 items-center h-11 hover:bg-gray-100 cursor-pointer p-2 rounded-md">
+                    <li key={index} className="flex gap-3 items-center h-11 hover:bg-gray-200 cursor-pointer p-2 rounded-md">
                         {icon.icon_position !== "" ? (
                             <div
                                 style={{
@@ -68,7 +68,7 @@ const SideBarIcons = ({ profile }) => {
                 ))}
 
             {/* See more / See less button */}
-            <li className="flex gap-3 items-center h-11 hover:bg-gray-100 cursor-pointer p-2 rounded-md" onClick={toggleShowAll}>
+            <li className="flex gap-3 items-center h-11 hover:bg-gray-200 cursor-pointer p-2 rounded-md" onClick={toggleShowAll}>
                 {showAll ? (
                     <>
                         <Icons.ArrowUp className="h-9 w-9 bg-gray-300 rounded-full p-2" />
